@@ -1,0 +1,9 @@
+// The PZ252 sight glass's own texture, unchanged, drawn over its clear view in thermals.
+"UnlitGeneric"
+{
+	"$basetexture"	"models/weapons/pz_sight"
+	"$translucent"	"1"
+	"$vertexcolor"	"1"
+	"$vertexalpha"	"1"
+	"$nocull"		"1"
+}
