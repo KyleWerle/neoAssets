@@ -1,0 +1,9 @@
+// The Jitte's optic reticle: its original lens texture, unchanged, drawn over the live view.
+"UnlitGeneric"
+{
+	"$basetexture"	"models/weapons/jitte_mat3"
+	"$translucent"	"1"
+	"$vertexcolor"	"1"
+	"$vertexalpha"	"1"
+	"$nocull"		"1"
+}
