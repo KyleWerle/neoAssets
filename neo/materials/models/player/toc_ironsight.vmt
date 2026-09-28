@@ -1,0 +1,124 @@
+// Viewmodel cloak while looking down the ironsights: models/player/toc with far less blur,
+// refraction and tint, so the target stays sharp through a cloaked gun.
+"Refract"
+{
+	"$model" "1"
+	"$refractamount" 	"0.01"
+	"$refracttint" 		"[0.97 0.97 0.97]"
+	"$translucent" 		"1"
+	"$forcerefract" 	"1"
+	"$vertexalpha" 		"1"
+	"$vertexcolor" 		"1"
+	"$bluramount" 		"1"
+	"$fresnelreflection"	"0.25"
+
+	"$dudvmap" 			"dev/water_dudv"
+	"$normalmap" 		"dev/water_normal"
+
+	"$surfaceprop" 		"water"
+	"$bumpframe" 		"0"
+	
+	"$thermoptic" 		"0"
+	"$cloakScaler" 		".05"
+	"$baseRefract" 		"0.01" 
+	
+	"$baseBlur"			"1"
+	"$cloakOnBlur"		"2"
+	
+	"$baseTint"			"0.97"
+	"$cloakOnTintR"		".15"
+	"$cloakOnTintGB"	".1"
+	
+	"$baseFresnel"		"0.25"
+	
+	"$temp" 0
+	"$alpha" 255
+
+	"Proxies"
+	{
+		"TextureScroll"
+		{ // Transform the water normal for an animated shimmer effect
+			"texturescrollvar" "$bumptransform"
+			"texturescrollrate" .05
+			"texturescrollangle" 45.00
+		}
+		"PlayerTO"
+		{ // Grab the player cloak factor
+			"resultVar" "$thermoptic"
+		}
+		"Multiply"
+		{ // Scale down the cloak factor
+			"srcvar1"	"$thermoptic"
+			"srcvar2"	"$cloakScaler"
+			"resultVar"	"$thermoptic"
+		}
+		
+		// refractamount varies between 0.035 when stood still and 0.235 when moving
+		"Add"
+		{
+			"srcvar1"	"$baseRefract"
+			"srcvar2"	"$thermoptic"
+			"resultVar"	"$refractamount"
+		}
+		
+		// bluramount varies between 10.5 when stood still and 14.5 when moving, if the decompile is to be believed
+		"Multiply"
+		{
+			"srcvar1"	"$thermoptic"
+			"srcvar2"	"$cloakOnBlur"
+			"resultVar"	"$bluramount"
+		}
+		"Add"
+		{
+			"srcvar1"	"$bluramount"
+			"srcvar2"	"$baseBlur"
+			"resultVar"	"$bluramount"
+		}
+		
+		// refracttint is [0.85, 0.85, 0.85] when stood still, and [0.69, 0.73, 0.73] when moving
+		"Multiply"
+		{ // Red
+			"srcvar1"	"$cloakOnTintR"
+			"srcvar2"	"$thermoptic"
+			"resultvar"	"$temp"
+		}
+		"Subtract"
+		{
+			"srcvar1"	"$baseTint"
+			"srcvar2"	"$temp"
+			"resultvar"	"$refracttint[0]"
+		}
+		"Multiply"
+		{ // Green, Blue
+			"srcvar1"	"$cloakOnTintGB"
+			"srcvar2"	"$thermoptic"
+			"resultvar"	"$temp"
+		}
+		"Subtract"
+		{
+			"srcvar1"	"$baseTint"
+			"srcvar2"	"$temp"
+			"resultvar"	"$refracttint[1]"
+		}
+		"Subtract"
+		{
+			"srcvar1"	"$baseTint"
+			"srcvar2"	"$temp"
+			"resultvar"	"$refracttint[2]"
+		}
+		
+		// fresnelreflection is 0.25 when stood still and 0.65 when moving, if the decompile is to be believed (does this even do anything?)
+		"Add"
+		{
+			"srcvar1"	"$thermoptic"
+			"srcvar2"	"$thermoptic"
+			"resultvar"	"$thermoptic"
+		}
+		"Add"
+		{
+			"srcvar1"	"$thermoptic"
+			"srcvar2"	"$baseFresnel"
+			"resultVar"	"$fresnelreflection"
+		}
+	}
+}
