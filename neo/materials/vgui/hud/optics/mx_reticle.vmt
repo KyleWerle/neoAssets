@@ -1,11 +1,11 @@
+// The MX eyepiece glass's own texture, unchanged, drawn over its clear view.
 "UnlitGeneric"
 {
-	"$basetexture"	"vgui/hud/optics/mx_reticle"
+	"$basetexture"	"models/weapons/lenseCompleteMap"
 	"$translucent"	"1"
 	"$vertexcolor"	"1"
 	"$vertexalpha"	"1"
 	"$nocull"		"1"
-	"$nolod"		"1"
 	// Wins against the lens surface it sits on (a depth bias, like bullet decals).
 	"$decal"		"1"
 }
